@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zw.cn.user.dao.UserMapper">
+    <resultMap id="BaseResultMap" type="com.zw.cn.user.PO.User">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="user_name" jdbcType="VARCHAR" property="userName"/>
+        <result column="passwd" jdbcType="VARCHAR" property="passwd"/>
+        <result column="age" jdbcType="INTEGER" property="age"/>
+        <result column="created_time" jdbcType="TIMESTAMP" property="createdTime"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+      id, user_name, passwd, age, created_time
+    </sql>
+
+    <!--用户登录验证-->
+    <select id="userLogin" parameterType="com.zw.cn.user.PO.User" resultType="com.zw.cn.user.PO.User">
+      SELECT id,username,passwd,age FROM user WHERE username = #{username} AND passwd = #{password}
+    </select>
+
+    <!--新用户注册  方式1-->
+    <insert id="addUser" parameterType="user" useGeneratedKeys="true" keyProperty="id">
+    INSERT INTO user (username,passwd,age) VALUES (#{username},#{password},#{age})
+  </insert>
+
+    <!--新用户注册  方式2-->
+    <insert id="addUser1" parameterType="user">
+    INSERT INTO user (id,username,passwd,age) VALUES (UUID(),#{username},#{password},#{age})
+  </insert>
+
+    <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from user
+        where id = #{id,jdbcType=VARCHAR}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from user
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+    <insert id="insert" parameterType="com.zw.cn.myspringboot.entity.User">
+    insert into user (id, username, passwd, 
+      age)
+    values (#{id,jdbcType=VARCHAR}, #{username,jdbcType=VARCHAR}, #{passwd,jdbcType=VARCHAR}, 
+      #{age,jdbcType=INTEGER})
+  </insert>
+    <insert id="insertSelective" parameterType="com.zw.cn.myspringboot.entity.User">
+        insert into user
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="username != null">
+                username,
+            </if>
+            <if test="passwd != null">
+                passwd,
+            </if>
+            <if test="age != null">
+                age,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=VARCHAR},
+            </if>
+            <if test="username != null">
+                #{username,jdbcType=VARCHAR},
+            </if>
+            <if test="passwd != null">
+                #{passwd,jdbcType=VARCHAR},
+            </if>
+            <if test="age != null">
+                #{age,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.zw.cn.myspringboot.entity.User">
+        update user
+        <set>
+            <if test="username != null">
+                username = #{username,jdbcType=VARCHAR},
+            </if>
+            <if test="passwd != null">
+                passwd = #{passwd,jdbcType=VARCHAR},
+            </if>
+            <if test="age != null">
+                age = #{age,jdbcType=INTEGER},
+            </if>
+        </set>
+        where id = #{id,jdbcType=VARCHAR}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.zw.cn.myspringboot.entity.User">
+    update user
+    set username = #{username,jdbcType=VARCHAR},
+      passwd = #{passwd,jdbcType=VARCHAR},
+      age = #{age,jdbcType=INTEGER}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

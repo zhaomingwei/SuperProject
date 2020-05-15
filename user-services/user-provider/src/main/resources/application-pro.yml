@@ -1,0 +1,21 @@
+server:
+  port: 8081
+
+#Mybatis打印sql
+logging:
+  level:
+    com.zw.cn.user.dao: debug
+
+# com.mysql.jdbc.Driver 是 mysql-connector-java 5中的，
+# com.mysql.cj.jdbc.Driver 是 mysql-connector-java 6+中的
+# serverTimezone=UTC，会比中国时间早8个小时，如果在中国，可以选择Asia/Shanghai或者Asia/Hongkong（待测试）
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/super_project?serverTimezone=Aisa/Shanghai&useUnicode=true&characterEncoding=utf8&useSSL=false
+    username: root
+    password: ENC()
+    driver-class-name: com.mysql.cj.jdbc.Driver
+#  redis:
+#      host: 10.39.251.126
+#      port: 6879
+#      database: 0
