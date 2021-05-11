@@ -17,7 +17,7 @@ public class Sort {
 //        int[] array = new int[]{3, 5, 8, 1, 2, 9, 4, 7, 6};
 
         // 测试效率  电脑配置  Intel(R) Core(TM) i7-8700 CPU @ 3.20GHz  3.19 GHz   16.0 GB  64位
-        int number = 100;
+        int number = 10;
 
         int[] array1 = new int[number];
         for (int i = 0; i < array1.length; i++) {
@@ -102,7 +102,7 @@ public class Sort {
      * 1 2    排好序     4 5 6 7 8 9  排好序
      * 最后排完是： 1 2 3 4 5 6 7 8 9
      *
-     * @param array  3 5 8 1 2 9 4 7 6
+     * @param array 3 5 8 1 2 9 4 7 6
      *              第一步：      2 5(left) 8 1(right) 3 9 4 7 6     交换3 和 2
      *              第二步：      2 5(left) 8 1(right) 3 9 4 7 6
      *              第三步：      2 1 8(left)(right) 5 3 9 4 7 6
@@ -114,25 +114,25 @@ public class Sort {
         //left 与 right left与right相邻时，有两种情况：
         // 第一：两个都符合各自while条件，则left++，right--，此时left在右，right在左
         // 第二：其中一个符合对应while条件，则left++或者right--，此时left与right重合，在同一个位置，此时在走一次循环，必然符合其中一个while，那么此时left与right依然是背向分开了
-        // 所以下面判断 start > end 时 即代表本次 排序完成
-        if (start > end){
+        // 所以下面判断 start >= end 时 即代表本次 排序完成   = 的情况 是只有一个数，那么此时的start = end
+        if (start >= end) {
             return;
         }
         // 第一个值作为基准值
         int pivot = array[start];
         int left = start;
         int right = end;
-        while (left <= right){
+        while (left <= right) {
             // 从左到右找， left一直往右移动 ，找第一个比pivot大的值的下标
-            while (left <= right && array[left] < pivot){
+            while (left <= right && array[left] < pivot) {
                 left++;
             }
             // 从右到左找， right一直往左移动 ，找第一个比pivot小的值的下标
-            while (left <= right && array[right] > pivot){
+            while (left <= right && array[right] > pivot) {
                 right--;
             }
             // 交换 左边第一个比pivot大的值 与 右边第一个比pivot小的值, left++,right--继续找，继续换
-            if (left <= right){
+            if (left <= right) {
                 int tmp = array[right];
                 array[right] = array[left];
                 array[left] = tmp;
@@ -296,7 +296,7 @@ public class Sort {
      * 调整堆  大顶堆
      * 4, 1, 2, 6, 8
      *
-     * @param array   待排序列
+     * @param array  待排序列
      * @param parent 父节点
      * @param length 待排序列尾元素索引
      */
