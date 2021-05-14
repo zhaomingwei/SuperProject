@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jumstc.bcc.domain.mapper.authBus.authApplyForm.extension.AuthApplyFormExtMapper">
+
+    <resultMap id="BaseResultMap" type="com.jumstc.bcc.domain.entity.authBus.authApplyForm.AuthApplyForm"
+               extends="com.jumstc.bcc.domain.mapper.authBus.authApplyForm.AuthApplyFormMapper.BaseResultMap"/>
+
+    <sql id="list_Page_where">
+        where valid = 1
+        <if test="model.applyNo !=null and model.applyNo !=''">
+            and apply_no like concat('%', #{model.applyNo}, '%')
+        </if>
+        <if test="model.authSource !=null and model.authSource !=''">
+            and auth_source = #{model.authSource}
+        </if>
+        <if test="model.authPersonKeywords !=null and model.authPersonKeywords !=''">
+            and (auth_person_code like concat('%', #{model.authPersonKeywords}, '%') or auth_person_name like
+            concat('%', #{model.authPersonKeywords}, '%'))
+        </if>
+        <if test="model.legalPersonKeywords !=null and model.legalPersonKeywords !=''">
+            and (auth_legal_person_name like concat('%', #{model.legalPersonKeywords}, '%') or auth_legal_person_phone
+            like concat('%', #{model.legalPersonKeywords}, '%'))
+        </if>
+        <if test="model.merchantBusType !=null and model.merchantBusType !=''">
+            and merchant_bus_type = #{model.merchantBusType}
+        </if>
+        <if test="model.merchantBusSubType !=null and model.merchantBusSubType !=''">
+            and merchant_bus_sub_type = #{model.merchantBusSubType}
+        </if>
+        <if test="model.createTimeStart !=null and model.createTimeEnd !=null">
+            and create_time between #{model.createTimeStart} and #{model.createTimeEnd}
+        </if>
+        <if test="model.auditTimeStart !=null and model.auditTimeEnd !=null">
+            and audit_time between #{model.auditTimeStart} and #{model.auditTimeEnd}
+        </if>
+        <if test="model.auditPerson !=null and model.auditPerson !=''">
+            and audit_person like concat('%', #{model.auditPerson}, '%')
+        </if>
+        <if test="model.applyStatus !=null and model.applyStatus !=''">
+            and apply_status = #{model.applyStatus}
+        </if>
+    </sql>
+
+    <!--查询总条数-->
+    <select id="queryCount" resultType="int">
+        select
+        count(1)
+        from t_bcc_auth_apply_form t
+        <include refid="list_Page_where"/>
+    </select>
+
+    <select id="authApplyList" resultMap="BaseResultMap">
+        select
+        <include refid="com.jumstc.bcc.domain.mapper.authBus.authApplyForm.AuthApplyFormMapper.Base_Column_List"/>
+        from t_bcc_auth_apply_form authApplyForm
+        <include refid="list_Page_where"/>
+        order by create_time desc limit #{startPos}, #{pageSize}
+    </select>
+
+</mapper>

@@ -6,40 +6,35 @@ import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
+/**
+ * @author 赵威
+ * @date 2021/4/26 14:01
+ * @desc TODO
+ */
 public interface BaseService<T, Example extends BaseExample, ID> {
-//	void setMapper();
-	
-	int countByExample(Example example);
+    long countByExample(Example var1);
 
-	int deleteByExample(Example example);
+    int deleteByExample(Example var1);
 
-	int deleteByPrimaryKey(ID id);
+    int deleteByPrimaryKey(ID var1);
 
-	int insert(T record);
+    int insert(T var1);
 
-	int insertSelective(T record);
+    int insertSelective(T var1);
 
-	List<T> selectByExample(Example example);
-	/**
-	 * if pageInfo == null<p/>
-	 * then return result of selectByExample(example)
-	 * @author ZhaoWei
-	 * @date Jul 13, 2017 5:24:35 PM
-	 * @param example
-	 * @param pageInfo
-	 * @return
-	 */
-	List<T> selectByPageExample(Example example, PageInfo pageInfo);
+    List<T> selectByExample(Example var1);
 
-	T selectByPrimaryKey(ID id);
+    T selectByCondition(Example var1);
 
-	int updateByExampleSelective(@Param("record") T record, @Param("example") Example example);
+    List<T> selectByPageExample(Example var1, PageInfo var2);
 
-	int updateByExample(@Param("record") T record, @Param("example") Example example);
+    T selectByPrimaryKey(ID var1);
 
-	int updateByPrimaryKeySelective(T record);
+    int updateByExampleSelective(@Param("record") T var1, @Param("example") Example var2);
 
-	int updateByPrimaryKey(T record);
+    int updateByExample(@Param("record") T var1, @Param("example") Example var2);
 
-//	int updateByPrimaryKeyWithBLOBs(T record);
+    int updateByPrimaryKeySelective(T var1);
+
+    int updateByPrimaryKey(T var1);
 }

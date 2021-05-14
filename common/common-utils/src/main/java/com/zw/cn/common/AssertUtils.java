@@ -3,10 +3,10 @@ package com.zw.cn.common;
 import com.zw.cn.exception.BaseException;
 
 /**
- * @author Marvis
+ * @author ZhaoWei
  * @version 2015-6-28下午9:57:42
  */
-public class AssertUtils extends BaseAssertUtils {
+public class AssertUtils extends BranchAssertUtils {
 
     /**
      * check Validate Domestic Mobile
@@ -15,7 +15,7 @@ public class AssertUtils extends BaseAssertUtils {
      * @param vCode       112:手机号码格式错误
      * @param loginMobile
      * @throws BaseException
-     * @author Marvis
+     * @author ZhaoWei
      * @version 2015-6-28下午10:29:47
      */
     public static void validateMobile(int emptyCode, int vCode, String loginMobile) {
@@ -29,7 +29,7 @@ public class AssertUtils extends BaseAssertUtils {
     /**
      * check email
      *
-     * @author Marvis
+     * @author ZhaoWei
      * @version 2015-6-28下午10:29:47
      */
     public static void isEmail(int emptyCode, int code, String email) {
@@ -46,7 +46,7 @@ public class AssertUtils extends BaseAssertUtils {
      * @param str
      * @return
      * @throws BaseException
-     * @author Marvis
+     * @author ZhaoWei
      * @version 2015-6-28下午10:23:46
      */
     public static void isNum(int code, String str) {

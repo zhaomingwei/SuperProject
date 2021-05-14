@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jumstc.bcc.domain.mapper.authConfig.BusMapper">
+    <resultMap id="BaseResultMap" type="com.jumstc.bcc.domain.entity.authConfig.Bus">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="bus_code" jdbcType="VARCHAR" property="busCode"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="type" jdbcType="VARCHAR" property="type"/>
+        <result column="material_ids" jdbcType="VARCHAR" property="materialIds"/>
+        <result column="inputs_info_str" jdbcType="VARCHAR" property="inputsInfoStr"/>
+        <result column="remark" jdbcType="VARCHAR" property="remark"/>
+        <result column="can_use_item_values" jdbcType="VARCHAR" property="canUseItemValues"/>
+        <result column="valid" jdbcType="INTEGER" property="valid"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+        <result column="create_user_name" jdbcType="VARCHAR" property="createUserName"/>
+        <result column="create_user_code" jdbcType="VARCHAR" property="createUserCode"/>
+        <result column="update_user_name" jdbcType="VARCHAR" property="updateUserName"/>
+        <result column="update_user_code" jdbcType="VARCHAR" property="updateUserCode"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        id, bus_code, `name`, `type`, material_ids, inputs_info_str, remark, can_use_item_values,
+    `valid`, create_time, update_time, create_user_name, create_user_code, update_user_name, 
+    update_user_code
+    </sql>
+
+    <sql id="list_Page_where">
+        where t.valid = 1
+        <if test="model.busCode !=null and model.busCode !=''">
+            and t.bus_code = #{model.busCode}
+        </if>
+        <if test="model.name !=null and model.name !=''">
+            and t.name like concat('%', #{model.name}, '%')
+        </if>
+        <if test="model.type !=null and model.type !=''">
+            and t.type = #{model.type}
+        </if>
+        <if test="model.id !=null and model.id !=''">
+            and t.id = #{model.id}
+        </if>
+        <if test="model.materialIds !=null and model.materialIds.size() > 0">
+            and
+            <foreach collection="model.materialIds" open="(" close=")" separator="or" item="item">
+                t.material_ids like concat('%', #{item}, '%')
+            </foreach>
+        </if>
+        <if test="model.updateUserName !=null and model.updateUserName !=''">
+            and t.update_user_name like concat('%', #{model.updateUserName}, '%')
+        </if>
+    </sql>
+
+    <select id="selectByPrimaryKey" parameterType="long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_bcc_bus
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+
+    <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.jumstc.bcc.domain.entity.authConfig.Bus"
+            useGeneratedKeys="true">
+        insert into t_bcc_bus
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="busCode != null">
+                bus_code,
+            </if>
+            <if test="name != null">
+                `name`,
+            </if>
+            <if test="type != null">
+                `type`,
+            </if>
+            <if test="materialIds != null">
+                material_ids,
+            </if>
+            <if test="inputsInfoStr != null">
+                inputs_info_str,
+            </if>
+            <if test="remark != null">
+                remark,
+            </if>
+            <if test="canUseItemValues != null">
+                can_use_item_values,
+            </if>
+            <if test="valid != null">
+                `valid`,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="updateTime != null">
+                update_time,
+            </if>
+            <if test="createUserName != null">
+                create_user_name,
+            </if>
+            <if test="createUserCode != null">
+                create_user_code,
+            </if>
+            <if test="updateUserName != null">
+                update_user_name,
+            </if>
+            <if test="updateUserCode != null">
+                update_user_code,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="busCode != null">
+                #{busCode,jdbcType=VARCHAR},
+            </if>
+            <if test="name != null">
+                #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="type != null">
+                #{type,jdbcType=VARCHAR},
+            </if>
+            <if test="materialIds != null">
+                #{materialIds,jdbcType=VARCHAR},
+            </if>
+            <if test="inputsInfoStr != null">
+                #{inputsInfoStr,jdbcType=VARCHAR},
+            </if>
+            <if test="remark != null">
+                #{remark,jdbcType=VARCHAR},
+            </if>
+            <if test="canUseItemValues != null">
+                #{canUseItemValues,jdbcType=VARCHAR},
+            </if>
+            <if test="valid != null">
+                #{valid,jdbcType=INTEGER},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null">
+                #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="createUserName != null">
+                #{createUserName,jdbcType=VARCHAR},
+            </if>
+            <if test="createUserCode != null">
+                #{createUserCode,jdbcType=VARCHAR},
+            </if>
+            <if test="updateUserName != null">
+                #{updateUserName,jdbcType=VARCHAR},
+            </if>
+            <if test="updateUserCode != null">
+                #{updateUserCode,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateByPrimaryKeySelective" parameterType="com.jumstc.bcc.domain.entity.authConfig.Bus">
+        update t_bcc_bus
+        <set>
+            <if test="busCode != null">
+                bus_code = #{busCode,jdbcType=VARCHAR},
+            </if>
+            <if test="name != null">
+                `name` = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="type != null">
+                `type` = #{type,jdbcType=VARCHAR},
+            </if>
+            <if test="materialIds != null">
+                material_ids = #{materialIds,jdbcType=VARCHAR},
+            </if>
+            <if test="inputsInfoStr != null">
+                inputs_info_str = #{inputsInfoStr,jdbcType=VARCHAR},
+            </if>
+            <if test="remark != null">
+                remark = #{remark,jdbcType=VARCHAR},
+            </if>
+            <if test="canUseItemValues != null">
+                can_use_item_values = #{canUseItemValues,jdbcType=VARCHAR},
+            </if>
+            <if test="valid != null">
+                `valid` = #{valid,jdbcType=INTEGER},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="createUserName != null">
+                create_user_name = #{createUserName,jdbcType=VARCHAR},
+            </if>
+            <if test="createUserCode != null">
+                create_user_code = #{createUserCode,jdbcType=VARCHAR},
+            </if>
+            <if test="updateUserName != null">
+                update_user_name = #{updateUserName,jdbcType=VARCHAR},
+            </if>
+            <if test="updateUserCode != null">
+                update_user_code = #{updateUserCode,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <select id="queryListByParam" resultType="com.jumstc.bcc.domain.entity.authConfig.Bus">
+        select
+            t.id, t.bus_code, t.`name`, tbdi.item_text `type`, t.material_ids, t.inputs_info_str, t.remark,
+            t.can_use_item_values,
+            t.`valid`, t.create_time, t.update_time, t.create_user_name, t.create_user_code, t.update_user_name,
+            t.update_user_code
+        from t_bcc_bus t left join t_bcc_dict_item tbdi on t.type = tbdi.item_value
+        <include refid="list_Page_where"/>
+        order by t.update_time desc limit #{startPos}, #{pageSize}
+    </select>
+
+    <!--查询总条数-->
+    <select id="queryCount" resultType="int">
+        select
+        count(1)
+        from t_bcc_bus t
+        <include refid="list_Page_where"/>
+    </select>
+
+    <!--根据名字、业务编码精确查询认证业务-->
+    <select id="queryByParam" resultMap="BaseResultMap">
+        select * from `t_bcc_bus` t
+        <where>
+            <if test="name != null and name != ''">and t.name = #{name}</if>
+            <if test="busCode != null and busCode != ''">and t.bus_code = #{busCode}</if>
+            <if test="id != null">and id != #{id}</if>
+        </where>
+    </select>
+
+    <!--根据名称模糊查询认证业务列表-->
+    <select id="queryListByName" resultType="com.jumstc.bcc.dto.response.authConfig.BusResponse">
+        select t.id, t.name, t.type from `t_bcc_bus` t
+        where valid = 1
+        <if test="name !=null and name !=''">
+            and name like concat('%', #{name}, '%')
+        </if>
+        order by update_time desc limit 5
+    </select>
+
+</mapper>

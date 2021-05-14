@@ -13,6 +13,7 @@
         <module>auth-services</module>
         <module>common</module>
         <module>algorithm</module>
+        <module>auth-services</module>
     </modules>
     <name>SuperProject</name>
     <packaging>pom</packaging>
@@ -68,6 +69,11 @@
             <groupId>com.zw.cn</groupId>
             <artifactId>response-common</artifactId>
             <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
+            <version>1.2.73</version>
         </dependency>
     </dependencies>
 

@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jumstc.bcc.domain.mapper.authConfig.ContentMapper">
+
+    <sql id="list_Page_where">
+        where t.valid = 1
+        <if test="model.name !=null and model.name !=''">
+            and t.name like concat('%', #{model.name}, '%')
+        </if>
+        <if test="model.type !=null and model.type !=''">
+            and t.type = #{model.type}
+        </if>
+        <if test="model.updateUserName !=null and model.updateUserName !=''">
+            and t.update_user_name like concat('%', #{model.updateUserName}, '%')
+        </if>
+    </sql>
+
+    <!--插入认证内容-->
+    <insert id="insert" parameterType="com.jumstc.bcc.domain.entity.authConfig.Content"
+            useGeneratedKeys="true" keyColumn="id" keyProperty="id">
+        insert into `t_bcc_content` (
+        <trim suffixOverrides=",">
+            <if test="name != null and name != ''">`name`,</if>
+            <if test="type != null and type != ''">`type`,</if>
+            <if test="remark != null and remark !=''">remark,</if>
+            <if test="tagCode != null and tagCode !=''">tag_code,</if>
+            <if test="valid != null">valid,</if>
+            <if test="createUserName != null and createUserName != null">create_user_name,</if>
+            <if test="createUserCode != null and createUserCode != null">create_user_code,</if>
+        </trim>
+        ) values (
+        <trim suffixOverrides=",">
+            <if test="name != null and name != ''">#{name},</if>
+            <if test="type != null and type != ''">#{type},</if>
+            <if test="remark != null and remark !=''">#{remark},</if>
+            <if test="tagCode != null and tagCode !=''">#{tagCode},</if>
+            <if test="valid != null">#{valid},</if>
+            <if test="createUserName != null and createUserName != null">#{createUserName},</if>
+            <if test="createUserCode != null and createUserCode != null">#{create_user_code},</if>
+        </trim>
+        )
+    </insert>
+
+    <!--根据筛选条件查询认证内容列表-->
+    <select id="queryListByParam" resultType="com.jumstc.bcc.dto.response.authConfig.ContentResponse">
+        select
+        t.id,
+        t.`name`,
+        tbdi.item_text `type`,
+        t.remark,
+        t.tag_code tagCode,
+        t.valid,
+        t.create_time,
+        t.update_time,
+        t.create_user_name,
+        t.update_user_name
+        from `t_bcc_content` t left join t_bcc_dict_item tbdi on t.type = tbdi.item_value
+        <include refid="list_Page_where"/>
+        order by t.`update_time` desc limit #{startPos}, #{pageSize}
+    </select>
+
+    <!--根据id查询认证内容信息-->
+    <select id="queryById" parameterType="long" resultType="com.jumstc.bcc.dto.response.authConfig.ContentResponse">
+        SELECT id,
+               `name`,
+               `type`,
+               remark,
+               t.tag_code tagCode,
+               valid,
+               create_time,
+               update_time,
+               create_user_name,
+               update_user_name
+        FROM `t_bcc_content` t
+        WHERE t.id = #{id}
+    </select>
+
+    <!--根据id更新认证内容信息-->
+    <update id="update" parameterType="com.jumstc.bcc.domain.entity.authConfig.Content">
+        UPDATE `t_bcc_content`
+        <set>
+            <if test="name != null and name != ''">`name` = #{name},</if>
+            <if test="type != null and type != ''">`type` = #{type},</if>
+            <if test="remark != null and remark !=''">remark = #{remark},</if>
+            <if test="tagCode != null and tagCode !=''">tag_code = #{tagCode},</if>
+            <if test="updateUserName != null and updateUserName != ''">update_user_name = #{updateUserName},</if>
+            <if test="updateUserCode != null and updateUserCode != ''">update_user_code = #{updateUserCode},</if>
+            <if test="valid != null ">valid = #{valid},</if>
+        </set>
+        WHERE id = #{id} limit 1;
+    </update>
+
+    <!--查询总条数-->
+    <select id="queryCount" resultType="int">
+        select
+        count(1)
+        from t_bcc_content t
+        <include refid="list_Page_where"/>
+    </select>
+
+    <!--根据名字精确查询认证内容-->
+    <select id="queryByName" resultType="com.jumstc.bcc.dto.response.authConfig.ContentResponse">
+        select * from `t_bcc_content` t where t.name = #{name}
+        <if test="id != null">and t.id != #{id}</if>
+    </select>
+
+    <!--根据列表id查询认证内容列表-->
+    <select id="queryListByIds" resultType="com.jumstc.bcc.dto.response.authConfig.ContentResponse">
+        select * from `t_bcc_content` t where t.id in
+        <foreach collection="list" open="(" close=")" separator="," item="item">
+            #{item}
+        </foreach>
+    </select>
+
+</mapper>

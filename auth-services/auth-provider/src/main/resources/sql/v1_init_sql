@@ -1,0 +1,154 @@
+CREATE TABLE `t_bcc_dict_item`
+(
+    `id`             int(11)                                NOT NULL AUTO_INCREMENT COMMENT '主键',
+    dict_code        varchar(50)  default ''                not null comment '字典编码',
+    item_text        varchar(50)  default ''                not null comment '字典项文本',
+    item_value       varchar(8)   default ''                not null unique comment '字典项值(全局唯一)',
+    sort_order       int(3)       default 0                 not null comment '排序',
+    remark           varchar(255) default ''                not null comment '备注',
+    valid            tinyint(1)   default 1                 not null comment '状态(是否有效,0-无效,1-有效)',
+    create_time      datetime     default CURRENT_TIMESTAMP not null comment '创建时间',
+    update_time      datetime     default CURRENT_TIMESTAMP not null on update CURRENT_TIMESTAMP comment '更新时间',
+    create_user_name varchar(64)  default ''                not null comment '创建人名称',
+    create_user_code varchar(64)  default ''                not null comment '创建人用户代码',
+    update_user_name varchar(64)  default ''                not null comment '更新人名称',
+    update_user_code varchar(64)  default ''                not null comment '更新人用户代码',
+    PRIMARY KEY (`id`)
+) ENGINE = InnoDB
+  AUTO_INCREMENT = 1
+  DEFAULT CHARSET = utf8 COMMENT ='字典项表';
+
+CREATE TABLE `t_bcc_content`
+(
+    `id`             int(11)                               NOT NULL AUTO_INCREMENT COMMENT '主键',
+    tag_code         varchar(10) default ''                not null unique comment '认证内容唯一识别码(全局唯一)AC000001:个人身份证正面,AC000002:个人身份证反面,AC000003:营业执照照片,AC000004:法人身份证正面,AC000005:法人身份证反面,AC000006:管理员身份证正面,AC000007:管理员身份证反面,AC000008:驾驶证图片',
+    `name`           varchar(100)                          not null comment '内容名称(全局唯一)',
+    `type`           varchar(8)                            not null comment '内容类型(来源于t_bcc_dict_item表的item_value)',
+    remark           varchar(500)                          null comment '内容备注',
+    valid            tinyint(1)  default 1                 not null comment '状态(是否有效,0-无效,1-有效)',
+    create_time      datetime    default CURRENT_TIMESTAMP not null comment '创建时间',
+    update_time      datetime    default CURRENT_TIMESTAMP not null on update CURRENT_TIMESTAMP comment '更新时间',
+    create_user_name varchar(64) default ''                not null comment '创建人名称',
+    create_user_code varchar(64) default ''                not null comment '创建人用户代码',
+    update_user_name varchar(64) default ''                not null comment '更新人名称',
+    update_user_code varchar(64) default ''                not null comment '更新人用户代码',
+    PRIMARY KEY (`id`)
+) ENGINE = InnoDB
+  AUTO_INCREMENT = 1
+  DEFAULT CHARSET = utf8 COMMENT ='认证内容管理表';
+
+CREATE TABLE `t_bcc_material`
+(
+    `id`             int(11)      NOT NULL AUTO_INCREMENT COMMENT '主键',
+    `name`           varchar(100) not null default '' comment '材料名称(全局唯一)',
+    content_ids      varchar(255) not null default '' comment '认证内容id串用,连接(来源于t_bcc_content表的tid)',
+    inputs_info_str  varchar(500) not null default '' comment '多个信息输入控件json串(tt:信息标题,tp:输入框类型,vs:校验策略,关联t_bcc_dict_item表的item_value字段)',
+    remark           varchar(500) not null default '' comment '内容备注',
+    valid            tinyint(1)   not null default 1 comment '状态(是否有效,0-无效,1-有效)',
+    create_time      datetime     not null default CURRENT_TIMESTAMP comment '创建时间',
+    update_time      datetime     not null default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP comment '更新时间',
+    create_user_name varchar(64)  not null default '' comment '创建人名称',
+    create_user_code varchar(64)  not null default '' comment '创建人用户代码',
+    update_user_name varchar(64)  not null default '' comment '更新人名称',
+    update_user_code varchar(64)  not null default '' comment '更新人用户代码',
+    PRIMARY KEY (`id`)
+) ENGINE = InnoDB
+  AUTO_INCREMENT = 1
+  DEFAULT CHARSET = utf8 COMMENT ='认证材料清单管理表';
+
+
+CREATE TABLE `t_bcc_bus`
+(
+    `id`                int(11)      NOT NULL AUTO_INCREMENT COMMENT '主键',
+    `bus_code`          varchar(50)  not null default '' comment '认证业务编码(全局唯一)',
+    `name`              varchar(100) not null default '' comment '认证业务名称(全局唯一)',
+    `type`              varchar(100) not null default '' comment '认证业务类型(来源于t_bcc_dict_item表的item_value)',
+    material_ids        varchar(255) not null default '' comment '认证材料清单id串用,连接(来源于t_bcc_material表的id)',
+    inputs_info_str     varchar(500) not null default '' comment '多个信息输入控件json串(tt:信息标题,tp:输入框类型,vs:校验策略,关联t_bcc_dict_item表的item_value字段)',
+    remark              varchar(500) not null default '' comment '内容备注',
+    can_use_item_values varchar(255) not null default '' comment '认证后可参与业务ID串用,连接(来源于t_bcc_dict_item表的item_value)',
+    valid               tinyint(1)   not null default 1 comment '状态(是否有效,0-无效,1-有效)',
+    create_time         datetime     not null default CURRENT_TIMESTAMP comment '创建时间',
+    update_time         datetime     not null default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP comment '更新时间',
+    create_user_name    varchar(64)  not null default '' comment '创建人名称',
+    create_user_code    varchar(64)  not null default '' comment '创建人用户代码',
+    update_user_name    varchar(64)  not null default '' comment '更新人名称',
+    update_user_code    varchar(64)  not null default '' comment '更新人用户代码',
+    PRIMARY KEY (`id`)
+) ENGINE = InnoDB
+  AUTO_INCREMENT = 1
+  DEFAULT CHARSET = utf8 COMMENT ='认证业务列表管理表';
+
+
+CREATE TABLE `t_bcc_finish_auth_content`
+(
+    `id`                int(11)      NOT NULL AUTO_INCREMENT COMMENT '主键',
+    `user_id`           varchar(50)  not null default '' comment '认证用户userId(接口传入,标识哪一个用户)',
+    `apply_no`          varchar(50)  not null default '' comment '认证申请单号(关联t_bcc_auth_apply_form表的apply_no字段)',
+    `auth_content_code` varchar(10)  not null default '' comment '认证内容编码(关联t_bcc_content表的tag_code字段)',
+    `auth_file_link`    varchar(255) not null default '' comment '认证文件链接',
+    remark              varchar(500) not null default '' comment '内容备注',
+    indate              datetime     null comment '有效期(到该时间后认证过期)',
+    valid               tinyint(1)   not null default 1 comment '状态(是否有效,0-无效,1-有效)',
+    create_time         datetime     not null default CURRENT_TIMESTAMP comment '创建时间',
+    update_time         datetime     not null default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP comment '更新时间',
+    create_user_name    varchar(64)  not null default '' comment '创建人名称',
+    create_user_code    varchar(64)  not null default '' comment '创建人用户代码',
+    update_user_name    varchar(64)  not null default '' comment '更新人名称',
+    update_user_code    varchar(64)  not null default '' comment '更新人用户代码',
+    PRIMARY KEY (`id`),
+    index idx_user_id (user_id),
+    index idx_apply_no (apply_no),
+    index idx_auth_content_code (auth_content_code),
+    index idx_create_time (create_time)
+) ENGINE = InnoDB
+  AUTO_INCREMENT = 1
+  DEFAULT CHARSET = utf8 COMMENT ='用户已完成的认证内容管理表';
+
+
+CREATE TABLE `t_bcc_auth_apply_form`
+(
+    `id`                      int(11)      NOT NULL AUTO_INCREMENT COMMENT '主键',
+    `user_id`                 varchar(50)  not null default '' comment '认证用户userId(接口传入,标识哪一个用户)',
+    `apply_no`                varchar(50)  not null default '' comment '认证申请单号(关联t_bcc_finish_auth_content表的apply_no字段,认证内容)',
+    `bus_code`                varchar(50)  not null default '' comment '认证业务编码(关联t_bcc_bus表的bus_code字段)',
+    `apply_status`            varchar(8)   not null default '' comment '认证申请单状态(关联t_bcc_dict_item表的item_value字段里的applyStatus)',
+    `audit_type`              varchar(8)   not null default '' comment '审核方式(关联t_bcc_dict_item表的item_value字段里的auditType)',
+    `audit_person`            varchar(50)  not null default '' comment '审核人',
+    `audit_time`              datetime     null comment '审核时间',
+    `audit_sug`               varchar(500) not null default '' comment '审核意见',
+    `auth_source`             varchar(8)   not null default '' comment '认证发起端(关联t_bcc_dict_item表的item_value字段里的authSource)',
+    `auth_person_type`        varchar(8)   not null default '' comment '认证发起人类型(关联t_bcc_dict_item表的item_value字段里的authPersonType)',
+    `auth_person_code`        varchar(50)  not null default '' comment '认证发起人编码(客商编码或者平台运营编码)',
+    `auth_person_name`        varchar(50)  not null default '' comment '认证发起人名称(客商名称或者平台运营姓名)',
+    `auth_legal_person_name`  varchar(50)  not null default '' comment '法人姓名(个人客商该指个人姓名)',
+    `auth_legal_person_phone` varchar(15)  not null default '' comment '法人手机号(个人客商该指个人手机号)',
+    `auth_type`               varchar(8)   not null default '' comment '认证类型(关联t_bcc_dict_item表的item_value字段里的authType)',
+    `merchant_bus_type`       varchar(8)   not null default '' comment '客商业务类型(关联t_bcc_dict_item表的item_value字段里的merchantBusType)',
+    `merchant_bus_sub_type`   varchar(8)   not null default '' comment '客商业务子类型(关联t_bcc_dict_item表的item_value字段里的merchantBusSubType)',
+    `auth_fill_content`       varchar(500) not null default '' comment '认证所填写内容(json串)',
+    remark                    varchar(500) not null default '' comment '内容备注',
+    valid                     tinyint(1)   not null default 1 comment '状态(是否有效,0-无效,1-有效)',
+    indate                    datetime     null comment '有效期(到该时间后认证过期)',
+    create_time               datetime     not null default CURRENT_TIMESTAMP comment '创建时间',
+    update_time               datetime     not null default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP comment '更新时间',
+    create_user_name          varchar(64)  not null default '' comment '创建人名称',
+    create_user_code          varchar(64)  not null default '' comment '创建人用户代码',
+    update_user_name          varchar(64)  not null default '' comment '更新人名称',
+    update_user_code          varchar(64)  not null default '' comment '更新人用户代码',
+    PRIMARY KEY (`id`),
+    index idx_apply_no (apply_no),
+    index idx_apply_status (apply_status),
+    index idx_auth_source (auth_source),
+    index idx_auth_person_code (auth_person_code),
+    index idx_auth_person_name (auth_person_name),
+    index idx_auth_legal_person_name (auth_legal_person_name),
+    index idx_auth_legal_person_phone (auth_legal_person_phone),
+    index idx_merchant_bus_type (merchant_bus_type),
+    index idx_merchant_bus_sub_type (merchant_bus_sub_type),
+    index idx_audit_time (audit_time),
+    index idx_create_time (create_time),
+    index idx_audit_person (audit_person)
+) ENGINE = InnoDB
+  AUTO_INCREMENT = 1
+  DEFAULT CHARSET = utf8 COMMENT ='用户认证申请单管理表';
