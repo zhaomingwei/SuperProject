@@ -26,12 +26,12 @@ public class ResultDataUtils {
         if (bean == null)
             return null;
         if (fields == null || fields.length == 0)
-            return describe(bean);
+            return ReflectUtils.describe(bean);
 
         Map<String, Object> map = new LinkedHashMap<String, Object>();
 
         for (String field : fields) {
-            Object value = getValue(bean, field);
+            Object value = ReflectUtils.getValue(bean, field);
             map.put(field, value);//if value is null，still put data
         }
 
@@ -62,7 +62,7 @@ public class ResultDataUtils {
     public static void initIntValue(Object bean, boolean needNull) {
         if (bean == null)
             return;
-        List<String> names = getFieldNames(bean.getClass());
+        List<String> names = ReflectUtils.getFieldNames(bean.getClass());
         for (String name : names) {
             try {
                 PropertyDescriptor pd = new PropertyDescriptor(name,
@@ -73,13 +73,13 @@ public class ResultDataUtils {
 
                 Class<?> returnType = pd.getReadMethod().getReturnType();
                 if (returnType == Integer.class) {
-                    setValue(bean, name, 0);
+                    ReflectUtils.setValue(bean, name, 0);
                 }
                 if (returnType == Double.class) {
-                    setValue(bean, name, 0.00d);
+                    ReflectUtils.setValue(bean, name, 0.00d);
                 }
                 if (returnType == Long.class) {
-                    setValue(bean, name, 0);
+                    ReflectUtils.setValue(bean, name, 0);
                 }
             } catch (Exception e) {
             }
@@ -90,9 +90,9 @@ public class ResultDataUtils {
         if (bean == null)
             return null;
         if (exFields == null || exFields.length == 0)
-            return describe(bean);
+            return ReflectUtils.describe(bean);
 
-        Map<String, Object> map = describe(bean);
+        Map<String, Object> map = ReflectUtils.describe(bean);
 
         for (String field : exFields) {
             map.remove(field);
