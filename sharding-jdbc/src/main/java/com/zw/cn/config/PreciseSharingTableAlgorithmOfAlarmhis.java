@@ -19,6 +19,8 @@ import java.util.Date;
 @Slf4j
 public class PreciseSharingTableAlgorithmOfAlarmhis implements PreciseShardingAlgorithm<Date> {
     private SimpleDateFormat dateformat = new SimpleDateFormat("yyyyMM");
+    // availableTargetNames为所有的逻辑表名集合，这里就是之前配置的alarmhis
+    // shardingValue就是分片的列
     @Override
     public String doSharding(Collection<String> availableTargetNames, PreciseShardingValue<Date> shardingValue) {
 
