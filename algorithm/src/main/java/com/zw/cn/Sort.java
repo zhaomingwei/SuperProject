@@ -62,10 +62,10 @@ public class Sort {
 
         //堆 10w 无序 大概 0.009s+   100w 无序 0.1s+   1000w 无序 1.6s+     1亿 无序 26s+
         long start4 = System.currentTimeMillis();
-//        heapSort(array4);
+        heapSort(array4);
         long end4 = System.currentTimeMillis();
         System.out.println("heapSort Sort : " + (end4 - start4));
-//        System.out.println(Arrays.toString(array4));
+        //System.out.println(Arrays.toString(array4));
 
         int[] array5 = new int[number];
         for (int i = 0; i < array5.length; i++) {
